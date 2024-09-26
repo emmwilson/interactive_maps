@@ -4,6 +4,9 @@ execute-dir: project
 ---
 
 ```{r include=FALSE}
+install.packages("rmarkdown")
+install.packages("knitr")
+
 library(shiny)
 library(leaflet)
 library(leafem)
