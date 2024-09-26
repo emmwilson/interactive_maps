@@ -1,0 +1,26 @@
+project:
+  type: website
+  resources:
+  - "data/*" 
+
+website:
+  title: "interactvie_maps"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Terra Nova"
+        href: TN_map.qmd
+      - text: "Gros Morne"
+        href: GM_map.qmd 
+
+format:
+  html:
+    theme: superhero
+    css: styles.css
+    toc: true
+
+editor: visual
+
+execute:
+  freeze: auto

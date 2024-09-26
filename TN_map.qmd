@@ -1,0 +1,126 @@
+---
+title: "TN_map"
+execute-dir: project 
+---
+
+```{r include=FALSE}
+library(shiny)
+library(leaflet)
+library(leafem)
+library(terra)
+library(sf)
+library(rsconnect)
+library(shinythemes)
+library(tidyverse)
+library(httr)
+```
+
+```{r include=FALSE}
+# roads and park boundaries
+roads <- vect("data/highways_nl.shp") %>% 
+  project("EPSG:4326 - WGS 84")
+
+parksGM <- vect("data/GM_outline.shp") %>% 
+  project("EPSG:4326 - WGS 84")
+parksTN <- vect("data/TN_outline.shp") %>% 
+  project("EPSG:4326 - WGS 84")
+
+# Terra Nova data and palettes
+TN_c <- rast("data/TN_predict_tot_bm.tif")
+TN_c_mean <- rast("data/TN_predict_tot_se.tif")
+TN_c_pred <- rast("data/TN_predict_tot_pse.tif")
+
+TN_g <- rast("data/TN_predict_gap_bm.tif")
+TN_g_mean <- rast("data/TN_predict_tot_gap_se.tif")
+TN_g_pred <- rast("data/TN_predict_tot_gap_pse.tif")
+```
+
+```{r include=FALSE}
+TNc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = values(TN_c), na.color = "transparent")
+TNcmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_c_mean), na.color = "transparent")
+TNcpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_c_pred), na.color = "transparent")
+
+TNg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = 0:1, na.color = "transparent")
+TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_mean), na.color = "transparent")
+TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_pred), na.color = "transparent")
+```
+
+```{r echo=FALSE}
+TN_map <- leaflet() %>%
+      addProviderTiles('Esri.WorldImagery') %>%
+      addMapPane("parks", zIndex = 410) %>% 
+      addMapPane("roads", zIndex = 415) %>%
+      addMapPane("pred", zIndex = 420) %>% 
+      addMapPane("mean", zIndex = 425) %>% 
+      addMapPane("goutput", zIndex = 430) %>%
+      addMapPane("coutput", zIndex = 435) %>% 
+      addPolylines(data = roads, color = "#efbc15", opacity = 1, weight = 1.25,
+                   options = pathOptions(pane = "roads")) %>%
+      addPolygons(data = parksTN, color = "#1f78b4", weight = 1.25, fillColor = "#1f78b4", fillOpacity = 0.5,
+                  options = pathOptions(pane = "parks")) %>% 
+      # carbon estimates
+      addRasterImage(x = TN_c , 
+                     color = TNc.pal,
+                     opacity = 1,
+                     group = "Estimated C stocks",
+                     options = pathOptions(pane = "coutput")) %>%
+      addLegend(pal = TNc.pal, values = values(TN_c),
+                title = "Total Carbon (g/m<sup>2</sup>)",
+                group = "Estimated C stocks", opacity = 1) %>% 
+      # carbon mean error   
+      addRasterImage(x = TN_c_mean , 
+                     color = TNcmean.pal,
+                     opacity = 1,
+                     group = "C mean residual error",
+                     options = pathOptions(pane = "mean")) %>%
+      addLegend(pal = TNcmean.pal, values = values(TN_c_mean),
+                title = "Mean residual error",
+                group = "C mean residual error", opacity = 1) %>%
+      # carbon prediction error   
+      addRasterImage(x = TN_c_pred , 
+                     color = TNcpred.pal,
+                     opacity = 1,
+                     group = "C prediction error",
+                     options = pathOptions(pane = "pred")) %>%
+      addLegend(pal = TNcpred.pal, values = values(TN_c_pred),
+                title = "Prediction error",
+                group = "C prediction error", opacity = 1) %>%
+      # gap estimates 
+      addRasterImage(x = TN_g , 
+                     color = TNg.pal,
+                     opacity = 1,
+                     group = "Estimated mature forest/gap",
+                     options = pathOptions(pane = "goutput")) %>%
+      addLegend(pal = TNg.pal, values = values(TN_g),
+                title = "Probability area is mature forest",
+                group = "Estimated mature forest/gap", opacity = 1) %>% 
+      # gap mean error 
+      addRasterImage(x = TN_g_mean , 
+                     color = TNgmean.pal,
+                     opacity = 1,
+                     group = "Mature forest mean residual error",
+                     options = pathOptions(pane = "mean")) %>%
+      addLegend(pal = TNgmean.pal, values = values(TN_g_mean),
+                title = "Mean residual error",
+                group = "Mature forest mean residual error", opacity = 1) %>% 
+      # gap prediction error 
+      addRasterImage(x = TN_g_pred , 
+                     color = TNgpred.pal,
+                     opacity = 1,
+                     group = "Mature forest prediction error",
+                     options = pathOptions(pane = "pred")) %>%
+      addLegend(pal = TNgpred.pal, values = values(TN_g_pred),
+                title = "Prediction error",
+                group = "Mature forest prediction error", opacity = 1) %>% 
+      fitBounds(-54.21, 48.37, -53.69, 48.68)%>% 
+      addHomeButton(ext = c(-54.21, 48.37, -53.69, 48.68), position = "topleft", group = "Recenter") %>% 
+      addLayersControl(overlayGroups = c("Estimated C stocks", "C mean residual error", "C prediction error", "Estimated mature forest/gap", "Mature forest mean residual error", "Mature forest prediction error"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
+      htmlwidgets::onRender("
+        function() {
+            $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:left\">Available layers</label>');
+        }
+    ") %>%
+      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error"))
+    
+TN_map
+```

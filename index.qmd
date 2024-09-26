@@ -1,0 +1,18 @@
+---
+title: "interactvie_maps"
+execute-dir: project
+---
+
+Authors: Emmerson Wilson
+
+Affiliated manuscript:
+
+Date:
+
+Affiliations:
+
+Funding:
+
+Estimates of total carbon stocks and where mature forest/gaps exist across Gros Morne and Terra Nova National Parks on the island of Newfoundland, Canada.
+
+Use the top navigation bar to explore the output for Gros Morne and Terra Nova. The pages may take a moment to load.
