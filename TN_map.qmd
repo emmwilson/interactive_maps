@@ -2,7 +2,11 @@
 title: "TN_map"
 format: 
   html:
-    page-layout: full
+    grid:
+      sidebar-width: 100px
+      body-width: 1000px
+      margin-width: 100px
+      gutter-width: 1.5rem
 ---
 
 ```{r include=FALSE}

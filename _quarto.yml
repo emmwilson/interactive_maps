@@ -20,7 +20,11 @@ format:
     theme: superhero
     css: styles.css
     toc: true
-    page-layout: full
+    grid:
+      sidebar-width: 100px
+      body-width: 1000px
+      margin-width: 100px
+      gutter-width: 1.5rem
 
 editor: visual
 
