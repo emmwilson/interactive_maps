@@ -22,7 +22,7 @@ format:
     toc: true
     grid:
       sidebar-width: 100px
-      body-width: 1000px
+      body-width: 2000px
       margin-width: 100px
       gutter-width: 1.5rem
 

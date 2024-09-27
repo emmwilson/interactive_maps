@@ -55,7 +55,7 @@ TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_pred), na.color = "transparent")
 ```
 
-```{r echo=FALSE }
+```{r echo=FALSE, out.height=100% }
 
 TN_map <- leaflet(height=1400, width=2000) %>%
       addProviderTiles('Esri.WorldImagery') %>%
