@@ -3,8 +3,7 @@ title: "TN_map"
 ---
 
 ```{r include=FALSE}
-install.packages("knitr")
-install.packages("rmarkdown")
+
 
 library(shiny)
 library(leaflet)
