@@ -1,5 +1,6 @@
 ---
 title: "interactvie_maps"
+    page-layout: full
 ---
 
 Authors: Emmerson Wilson,
