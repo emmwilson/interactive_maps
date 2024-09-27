@@ -48,8 +48,8 @@ TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_pred), na.color = "transparent")
 ```
 
-```{r echo=FALSE}
-TN_map <- leaflet(width = "100%") %>%
+```{r echo=FALSE , out.height = '100%'}
+TN_map <- leaflet() %>%
       addProviderTiles('Esri.WorldImagery') %>%
       addMapPane("parks", zIndex = 410) %>% 
       addMapPane("roads", zIndex = 415) %>%
