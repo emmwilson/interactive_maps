@@ -117,7 +117,7 @@ TN_map <- leaflet() %>%
                 title = "Prediction error",
                 group = "Mature forest prediction error", opacity = 1) %>% 
       fitBounds(-54.21, 48.37, -53.69, 48.68)%>% 
-      addHomeButton(ext = c(-54.21, 48.37, -53.69, 48.68), position = "topleft", group = "Recenter") %>% 
+      # addHomeButton(ext = c(-54.21, 48.37, -53.69, 48.68), position = "topleft", group = "Recenter") %>% 
       addLayersControl(overlayGroups = c("Estimated C stocks", "C mean residual error", "C prediction error", "Estimated mature forest/gap", "Mature forest mean residual error", "Mature forest prediction error"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
       htmlwidgets::onRender("
         function() {
