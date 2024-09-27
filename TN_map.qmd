@@ -3,10 +3,7 @@ title: "TN_map"
 format: 
   html:
     grid:
-      sidebar-width: 100px
-      body-width: 1000px
-      margin-width: 100px
-      gutter-width: 1.5rem
+      body-width: 1500px
 ---
 
 ```{r include=FALSE}
@@ -55,9 +52,9 @@ TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_pred), na.color = "transparent")
 ```
 
-```{r echo=FALSE, out.height=100% }
+```{r echo=FALSE, out.height=1000px, out.width=1500px}
 
-TN_map <- leaflet(height=1400, width=2000) %>%
+TN_map <- leaflet() %>%
       addProviderTiles('Esri.WorldImagery') %>%
       addMapPane("parks", zIndex = 410) %>% 
       addMapPane("roads", zIndex = 415) %>%
