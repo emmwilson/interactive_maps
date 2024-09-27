@@ -1,5 +1,10 @@
 ---
 title: "Terra Nova Map"
+format:
+  html:
+    grid:
+      margin-width: 50px
+      body-width: 1000px
 ---
 
 ```{r include=FALSE}
@@ -39,18 +44,18 @@ TN_g_pred <- rast("data/TN_predict_tot_gap_pse.tif")
 ```
 
 ```{r include=FALSE}
-TNc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = values(TN_c), na.color = "transparent")
-TNcmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_c_mean), na.color = "transparent")
-TNcpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_c_pred), na.color = "transparent")
+TNc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = rev(values(TN_c)), na.color = "transparent")
+TNcmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_c_mean)), na.color = "transparent")
+TNcpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_c_pred)), na.color = "transparent")
 
-TNg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = 0:1, na.color = "transparent")
-TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_mean), na.color = "transparent")
-TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_pred), na.color = "transparent")
+TNg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = rev(0:1), na.color = "transparent")
+TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_g_mean)), na.color = "transparent")
+TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_g_pred)), na.color = "transparent")
 ```
 
 ```{r echo=FALSE}
 
-TN_map <- leaflet() %>%
+TN_map <- leaflet(height=1100, width=1000) %>%
       addProviderTiles('Esri.WorldImagery') %>%
       addMapPane("parks", zIndex = 410) %>% 
       addMapPane("roads", zIndex = 415) %>%
@@ -116,8 +121,8 @@ TN_map <- leaflet() %>%
       addLegend(pal = TNgpred.pal, values = values(TN_g_pred),
                 title = "Prediction error",
                 group = "Mature forest prediction error", opacity = 1) %>% 
-      fitBounds(-54.21, 48.37, -53.69, 48.68)%>% 
-      # addHomeButton(ext = c(-54.21, 48.37, -53.69, 48.68), position = "topleft", group = "Recenter") %>%
+      fitBounds(-54.1, 48.38, -53.8, 48.66)%>% 
+      addHomeButton(ext = c(-54.1, 48.38, -53.8, 48.66), position = "topleft", group = "Recenter") %>%
       addLayersControl(overlayGroups = c("Estimated C stocks", "C mean residual error", "C prediction error", "Estimated mature forest/gap", "Mature forest mean residual error", "Mature forest prediction error"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
       htmlwidgets::onRender("
         function() {

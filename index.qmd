@@ -1,5 +1,10 @@
 ---
 title: "interactvie_maps"
+format:
+  html:
+    grid:
+      margin-width: 50px
+      body-width: 1000px
 ---
 
 Authors: Emmerson Wilson,

@@ -21,5 +21,6 @@ format:
     theme: superhero
     css: styles.css
     toc: true
+    page-layout: full
 
 editor: visual
