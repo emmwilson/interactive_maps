@@ -1,1 +1,0 @@
-Sitemap: https://emmwilson.github.io/interactive_maps/sitemap.xml
