@@ -47,8 +47,8 @@ GMgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 GMgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(GM_g_pred), na.color = "transparent")
 ```
 
-```{r echo=FALSE, out.height = '100%'}
-GM_map <- leaflet() %>%
+```{r echo=FALSE}
+GM_map <- leaflet(height=1400, width=2000) %>%
       addProviderTiles('Esri.WorldImagery') %>%
       addMapPane("parks", zIndex = 410) %>% 
       addMapPane("roads", zIndex = 415) %>%
