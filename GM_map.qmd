@@ -1,5 +1,5 @@
 ---
-title: "GM_map"
+title: "Gros Morne Map"
 ---
 
 ```{r include=FALSE}
