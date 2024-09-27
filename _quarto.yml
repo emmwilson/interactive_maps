@@ -20,8 +20,7 @@ format:
     theme: superhero
     css: styles.css
     toc: true
-    page-layout: full
-        grid:
+    grid:
       margin-width: 50px
       body-width: 1000px
 
