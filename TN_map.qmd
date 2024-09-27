@@ -1,9 +1,5 @@
 ---
-title: "TN_map"
-format: 
-  html:
-    grid:
-      body-width: 1500px
+title: "Terra Nova Map"
 ---
 
 ```{r include=FALSE}
@@ -52,7 +48,7 @@ TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(TN_g_pred), na.color = "transparent")
 ```
 
-```{r echo=FALSE, out.height=1000px, out.width=1500px}
+```{r echo=FALSE}
 
 TN_map <- leaflet() %>%
       addProviderTiles('Esri.WorldImagery') %>%

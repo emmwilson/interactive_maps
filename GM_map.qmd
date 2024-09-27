@@ -1,9 +1,5 @@
 ---
 title: "GM_map"
-format: 
-  html:
-    grid:
-      body-width: 1000px
 ---
 
 ```{r include=FALSE}
@@ -51,7 +47,7 @@ GMgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 GMgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(GM_g_pred), na.color = "transparent")
 ```
 
-```{r echo=FALSE, out.height=1000px, out.width=1500px}
+```{r echo=FALSE}
 
 GM_map <- leaflet() %>%
       addProviderTiles('Esri.WorldImagery') %>%
