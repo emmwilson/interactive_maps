@@ -16,6 +16,8 @@ library(rsconnect)
 library(shinythemes)
 library(tidyverse)
 library(httr)
+library(rmarkdown)
+library(knitr)
 
 ```
 
