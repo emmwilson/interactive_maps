@@ -1,6 +1,5 @@
 ---
 title: "interactvie_maps"
-execute-dir: project
 ---
 
 Authors: Emmerson Wilson,

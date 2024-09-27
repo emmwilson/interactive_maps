@@ -1,6 +1,5 @@
 ---
 title: "GM_map"
-execute-dir: project 
 ---
 
 ```{r include=FALSE}
