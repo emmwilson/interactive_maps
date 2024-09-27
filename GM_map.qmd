@@ -1,5 +1,7 @@
 ---
 title: "GM_map"
+format: 
+  html:
     page-layout: full
 ---
 
@@ -49,7 +51,6 @@ GMgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = values(
 ```
 
 ```{r echo=FALSE}
-#| fig-column: page-right
 
 GM_map <- leaflet(height=1400, width=2000) %>%
       addProviderTiles('Esri.WorldImagery') %>%
