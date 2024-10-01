@@ -44,12 +44,12 @@ GM_g_pred <- rast("data/GM_predict_tot_gap_pse.tif")
 
 ```{r include=FALSE}
 GMc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = rev(values(GM_c)), na.color = "transparent")
-GMcmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(GM_c_mean)), na.color = "transparent")
-GMcpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(GM_c_pred)), na.color = "transparent")
+GMcmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(GM_c_mean)), na.color = "transparent")
+GMcpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(GM_c_pred)), na.color = "transparent")
 
 GMg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = rev(0:1), na.color = "transparent")
-GMgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(GM_g_mean)), na.color = "transparent")
-GMgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(GM_g_pred)), na.color = "transparent")
+GMgmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(GM_g_mean)), na.color = "transparent")
+GMgpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(GM_g_pred)), na.color = "transparent")
 ```
 
 ```{r echo=FALSE}
