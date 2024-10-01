@@ -41,6 +41,9 @@ TN_c_pred <- rast("data/TN_predict_tot_pse.tif")
 TN_g <- rast("data/TN_predict_gap_bm.tif")
 TN_g_mean <- rast("data/TN_predict_tot_gap_se.tif")
 TN_g_pred <- rast("data/TN_predict_tot_gap_pse.tif")
+
+# north arrow
+arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.png"
 ```
 
 ```{r include=FALSE}
@@ -129,7 +132,9 @@ TN_map <- leaflet(height=1100, width=1000) %>%
             $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:left\">Available layers</label>');
         }
     ") %>%
-      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error"))
+      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error")) %>%
+  addScaleBar(position = "bottomright") %>% 
+  addLogo(arrow)
     
 TN_map
 ```

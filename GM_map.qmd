@@ -6,6 +6,9 @@ format:
       margin-width: 50px
       body-width: 1000px
 ---
+#to add:
+hover returns value
+info to index
 
 ```{r include=FALSE}
 
@@ -21,6 +24,7 @@ library(tidyverse)
 library(httr)
 library(rmarkdown)
 library(knitr)
+library(magick)
 
 ```
 
@@ -40,6 +44,9 @@ GM_c_pred <- rast("data/GM_predict_tot_pse.tif")
 GM_g <- rast("data/GM_predict_gap_bm.tif")
 GM_g_mean <- rast("data/GM_predict_tot_gap_se.tif")
 GM_g_pred <- rast("data/GM_predict_tot_gap_pse.tif")
+
+# north arrow
+arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.png"
 ```
 
 ```{r include=FALSE}
@@ -128,7 +135,9 @@ GM_map <- leaflet(height=1100, width=1000) %>%
             $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:left\">Available layers</label>');
         }
     ") %>%
-      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error"))
+      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error")) %>%
+  addScaleBar(position = "bottomright") %>% 
+  addLogo(arrow)
     
 GM_map
 ```
