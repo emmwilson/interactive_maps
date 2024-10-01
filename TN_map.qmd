@@ -45,12 +45,12 @@ TN_g_pred <- rast("data/TN_predict_tot_gap_pse.tif")
 
 ```{r include=FALSE}
 TNc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = rev(values(TN_c)), na.color = "transparent")
-TNcmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_c_mean)), na.color = "transparent")
-TNcpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_c_pred)), na.color = "transparent")
+TNcmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(TN_c_mean)), na.color = "transparent")
+TNcpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(TN_c_pred)), na.color = "transparent")
 
 TNg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = rev(0:1), na.color = "transparent")
-TNgmean.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_g_mean)), na.color = "transparent")
-TNgpred.pal <- colorNumeric(c("#fcfbfd", "#9e9ac8", "#3f007d"), domain = rev(values(TN_g_pred)), na.color = "transparent")
+TNgmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(TN_g_mean)), na.color = "transparent")
+TNgpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(TN_g_pred)), na.color = "transparent")
 ```
 
 ```{r echo=FALSE}
