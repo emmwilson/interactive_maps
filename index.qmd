@@ -5,15 +5,15 @@ format:
     grid:
       margin-width: 50px
       body-width: 1000px
+date: last-modified
+date-format: "DD/MM/YY"
 ---
 
-Authors: Emmerson Wilson,
+Authors: Emmerson Wilson, Rachael Moran, Shawn Leroux, Darroch Whitaker, Yolanda Wiersma
 
-Affiliated manuscript:
+Affiliated manuscript: Predicting carbon storage across maritime boreal forests under combined disturbances. In prep.
 
-Date:
-
-Affiliations:
+Affiliations: Memorial University of Newfoundland, Parks Canada
 
 Funding:
 

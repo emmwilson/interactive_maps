@@ -71,7 +71,7 @@ GM_map <- leaflet(height=1100, width=1000) %>%
       addMapPane("coutput", zIndex = 435) %>% 
       addPolylines(data = roads, color = "#efbc15", opacity = 1, weight = 1.25,
                    options = pathOptions(pane = "roads")) %>%
-      addPolygons(data = parksGM, color = "#1f78b4", weight = 1.25, fillColor = "#1f78b4", fillOpacity = 0.5,
+      addPolygons(data = parksGM, color = "#1f78b4", weight = 1.25, fillColor = "#1f78b4", fillOpacity = 0.15,
                   options = pathOptions(pane = "parks")) %>% 
       # carbon estimates
       addRasterImage(x = GM_c , 

@@ -21,6 +21,8 @@ library(tidyverse)
 library(httr)
 library(rmarkdown)
 library(knitr)
+library(mapview)
+library(plainview)
 ```
 
 ```{r include=FALSE}
@@ -68,7 +70,7 @@ TN_map <- leaflet(height=1100, width=1000) %>%
       addMapPane("coutput", zIndex = 435) %>% 
       addPolylines(data = roads, color = "#efbc15", opacity = 1, weight = 1.25,
                    options = pathOptions(pane = "roads")) %>%
-      addPolygons(data = parksTN, color = "#1f78b4", weight = 1.25, fillColor = "#1f78b4", fillOpacity = 0.5,
+      addPolygons(data = parksTN, color = "#1f78b4", weight = 1.25, fillColor = "#1f78b4", fillOpacity = 0.15,
                   options = pathOptions(pane = "parks")) %>% 
       # carbon estimates
       addRasterImage(x = TN_c , 
@@ -134,7 +136,11 @@ TN_map <- leaflet(height=1100, width=1000) %>%
     ") %>%
       hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error")) %>%
   addScaleBar(position = "bottomright") %>% 
-  addLogo(arrow)
-    
+  addLogo(arrow) 
+  
+
+
 TN_map
+
+
 ```
