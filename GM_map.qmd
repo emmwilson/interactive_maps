@@ -38,12 +38,12 @@ parksGM <- vect("data/GM_outline.shp") %>%
 
 # Terra Nova data and palettes
 GM_c <- rast("data/GM_predict_tot_bm.tif")
-GM_c_mean <- rast("data/GM_predict_tot_se.tif")
-GM_c_pred <- rast("data/GM_predict_tot_pse.tif")
+GM_c_mean <- rast("data/GM_predict_tot_se1.tif")
+GM_c_pred <- rast("data/GM_predict_tot_pse1.tif")
 
 GM_g <- rast("data/GM_predict_gap_bm.tif")
-GM_g_mean <- rast("data/GM_predict_tot_gap_se.tif")
-GM_g_pred <- rast("data/GM_predict_tot_gap_pse.tif")
+GM_g_mean <- rast("data/GM_predict_tot_gap_se1.tif")
+GM_g_pred <- rast("data/GM_predict_tot_gap_pse1.tif")
 
 # north arrow
 arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.png"
