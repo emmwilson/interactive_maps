@@ -6,9 +6,6 @@ format:
       margin-width: 50px
       body-width: 1000px
 ---
-#to add:
-hover returns value
-info to index
 
 ```{r include=FALSE}
 
