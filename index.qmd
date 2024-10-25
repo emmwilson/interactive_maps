@@ -9,9 +9,9 @@ date: last-modified
 date-format: "DD/MM/YY"
 ---
 
-Predictions of total carbon stocks and where mature forest/gaps exist across Gros Morne and Terra Nova National Parks on the island of Newfoundland, Canada. Also includes error estimates.
+Predictions of total carbon stocks and where mature forest/gaps exist across Terra Nova and Gros Morne National Parks on the island of Newfoundland, Canada. Also includes error estimates.
 
-Use the top navigation bar to explore the output for Gros Morne and Terra Nova. The pages may take a moment to load.
+Use the top navigation bar to explore the output for Terra Nova and Gros Morne National Parks.
 
 ------------------------------------------------------------------------
 
