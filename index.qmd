@@ -1,5 +1,5 @@
 ---
-title: "interactvie_maps"
+title: "Interactive maps"
 format:
   html:
     grid:
@@ -9,14 +9,16 @@ date: last-modified
 date-format: "DD/MM/YY"
 ---
 
-Authors: Emmerson Wilson, Rachael Moran, Shawn Leroux, Darroch Whitaker, Yolanda Wiersma
-
-Affiliated manuscript: Predicting carbon storage across maritime boreal forests under combined disturbances. In prep.
-
-Affiliations: Memorial University of Newfoundland, Parks Canada
-
-Funding:
-
-Estimates of total carbon stocks and where mature forest/gaps exist across Gros Morne and Terra Nova National Parks on the island of Newfoundland, Canada.
+Predictions of total carbon stocks and where mature forest/gaps exist across Gros Morne and Terra Nova National Parks on the island of Newfoundland, Canada. Also includes error estimates.
 
 Use the top navigation bar to explore the output for Gros Morne and Terra Nova. The pages may take a moment to load.
+
+------------------------------------------------------------------------
+
+**Affiliated manuscript**: Predicting carbon storage across maritime boreal forests under combined disturbances. In prep.
+
+**Authors**: Emmerson Wilson, Rachael Moran, Shawn Leroux, Darroch Whitaker, Yolanda Wiersma
+
+**Affiliations**: Memorial University of Newfoundland, Parks Canada
+
+**Funding**: This research was funded by Terra Nova National Park, Gros Morne National Park, and the Natural Sciences and Engineering Research Council of Canada (Canada Graduate Scholarship to ERW and Alliance grant to SJL & YW). This project contains information licensed under the Open Licence – Parks Canada Agency.
