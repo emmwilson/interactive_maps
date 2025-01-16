@@ -30,19 +30,21 @@ library(plainview)
 roads <- vect("data/highways_nl.shp") %>% 
   project("EPSG:4326 - WGS 84")
 
-parksGM <- vect("data/GM_outline.shp") %>% 
-  project("EPSG:4326 - WGS 84")
 parksTN <- vect("data/TN_outline.shp") %>% 
   project("EPSG:4326 - WGS 84")
 
 # Terra Nova data and palettes
 TN_c <- rast("data/TN_predict_tot_bm.tif")
-TN_c_mean <- rast("data/TN_predict_tot_se1.tif")
-TN_c_pred <- rast("data/TN_predict_tot_pse1.tif")
+TN_c_CIlow <- rast("data/TN_CI_lower_95.tif")
+TN_c_CIupp <- rast("data/TN_CI_upper_95.tif")
+TN_c_PIlow <- rast("data/TN_PI_lower_95.tif")
+TN_c_PIupp <- rast("data/TN_PI_upper_95.tif")
 
 TN_g <- rast("data/TN_predict_gap_bm.tif")
-TN_g_mean <- rast("data/TN_predict_tot_gap_se1.tif")
-TN_g_pred <- rast("data/TN_predict_tot_gap_pse1.tif")
+TN_g_CIlow <- rast("data/TN_gCI_lower_95.tif")
+TN_g_CIupp <- rast("data/TN_gCI_upper_95.tif")
+TN_g_PIlow <- rast("data/TN_gPI_lower_95.tif")
+TN_g_PIupp <- rast("data/TN_gPI_upper_95.tif")
 
 # north arrow
 arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.png"
@@ -50,12 +52,12 @@ arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.pn
 
 ```{r include=FALSE}
 TNc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = rev(values(TN_c)), na.color = "transparent")
-TNcmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(TN_c_mean)), na.color = "transparent")
-TNcpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(TN_c_pred)), na.color = "transparent")
+TNcCI.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = c(min(values(TN_c_CIlow), na.rm = T), max(values(TN_c_CIupp), na.rm = T)), na.color = "transparent")
+TNcPI.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = c(min(values(TN_c_PIlow), na.rm = T), max(values(TN_c_PIupp), na.rm = T)), na.color = "transparent")
 
 TNg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = rev(0:1), na.color = "transparent")
-TNgmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(TN_g_mean)), na.color = "transparent")
-TNgpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(TN_g_pred)), na.color = "transparent")
+TNgCI.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = c(min(values(TN_g_CIlow), na.rm = T), max(values(TN_g_CIupp), na.rm = T)), na.color = "transparent")
+TNgPI.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = c(min(values(TN_g_PIlow), na.rm = T), max(values(TN_g_PIupp), na.rm = T)), na.color = "transparent")
 ```
 
 ```{r echo=FALSE}
@@ -64,8 +66,10 @@ TN_map <- leaflet(height=1100, width=1000) %>%
       addProviderTiles('Esri.WorldImagery') %>%
       addMapPane("parks", zIndex = 410) %>% 
       addMapPane("roads", zIndex = 415) %>%
-      addMapPane("pred", zIndex = 420) %>% 
-      addMapPane("mean", zIndex = 425) %>% 
+      addMapPane("PIupp", zIndex = 420) %>% 
+      addMapPane("PIlow", zIndex = 420) %>% 
+      addMapPane("CIupp", zIndex = 430) %>% 
+      addMapPane("CIlow", zIndex = 430) %>% 
       addMapPane("goutput", zIndex = 430) %>%
       addMapPane("coutput", zIndex = 435) %>% 
       addPolylines(data = roads, color = "#efbc15", opacity = 1, weight = 1.25,
@@ -81,24 +85,42 @@ TN_map <- leaflet(height=1100, width=1000) %>%
       addLegend(pal = TNc.pal, values = values(TN_c),
                 title = "Total Carbon (g/m<sup>2</sup>)",
                 group = "Estimated C stocks", opacity = 1) %>% 
-      # carbon mean error   
-      addRasterImage(x = TN_c_mean , 
-                     color = TNcmean.pal,
+      # carbon lower CI  
+      addRasterImage(x = TN_c_CIlow , 
+                     color = TNcCI.pal,
                      opacity = 1,
-                     group = "C mean residual error",
-                     options = pathOptions(pane = "mean")) %>%
-      addLegend(pal = TNcmean.pal, values = values(TN_c_mean),
-                title = "Mean residual error",
-                group = "C mean residual error", opacity = 1) %>%
-      # carbon prediction error   
-      addRasterImage(x = TN_c_pred , 
-                     color = TNcpred.pal,
+                     group = "C lower 95% CI",
+                     options = pathOptions(pane = "CIlow")) %>%
+      addLegend(pal = TNcCI.pal, values = values(c(TN_c_CIlow, TN_c_CIupp)),
+                title = "95% CI </br> for carbon estimates (g/m<sup>2</sup>)",
+                group = "C lower 95% CI", opacity = 1) %>%
+      # carbon upper CI
+      addRasterImage(x = TN_c_CIupp , 
+                     color = TNcCI.pal,
                      opacity = 1,
-                     group = "C prediction error",
-                     options = pathOptions(pane = "pred")) %>%
-      addLegend(pal = TNcpred.pal, values = values(TN_c_pred),
-                title = "Prediction error",
-                group = "C prediction error", opacity = 1) %>%
+                     group = "C upper 95% CI",
+                     options = pathOptions(pane = "CIupp")) %>%
+      addLegend(pal = TNcCI.pal, values = values(c(TN_c_CIlow, TN_c_CIupp)),
+                title = "95% CI </br> for carbon estimates (g/m<sup>2</sup>)",
+                group = "C upper 95% CI", opacity = 1) %>%
+      # carbon lower PI  
+      addRasterImage(x = TN_c_PIlow , 
+                     color = TNcPI.pal,
+                     opacity = 1,
+                     group = "C lower 95% PI",
+                     options = pathOptions(pane = "PIlow")) %>%
+      addLegend(pal = TNcPI.pal, values = values(c(TN_c_PIlow, TN_c_PIupp)),
+                title = "95% PI </br> for carbon estimates (g/m<sup>2</sup>)",
+                group = "C lower 95% PI", opacity = 1) %>%
+      # carbon upper PI
+      addRasterImage(x = TN_c_PIupp , 
+                     color = TNcPI.pal,
+                     opacity = 1,
+                     group = "C upper 95% PI",
+                     options = pathOptions(pane = "PIupp")) %>%
+      addLegend(pal = TNcPI.pal, values = values(c(TN_c_PIlow, TN_c_PIupp)),
+                title = "95% PI </br> for carbon estimates (g/m<sup>2</sup>)",
+                group = "C upper 95% PI", opacity = 1) %>%
       # gap estimates 
       addRasterImage(x = TN_g , 
                      color = TNg.pal,
@@ -108,33 +130,51 @@ TN_map <- leaflet(height=1100, width=1000) %>%
       addLegend(pal = TNg.pal, values = values(TN_g),
                 title = "Probability area is mature forest",
                 group = "Estimated mature forest/gap", opacity = 1) %>% 
-      # gap mean error 
-      addRasterImage(x = TN_g_mean , 
-                     color = TNgmean.pal,
+     # gap lower CI  
+      addRasterImage(x = TN_g_CIlow , 
+                     color = TNgCI.pal,
                      opacity = 1,
-                     group = "Mature forest mean residual error",
-                     options = pathOptions(pane = "mean")) %>%
-      addLegend(pal = TNgmean.pal, values = values(TN_g_mean),
-                title = "Mean residual error",
-                group = "Mature forest mean residual error", opacity = 1) %>% 
-      # gap prediction error 
-      addRasterImage(x = TN_g_pred , 
-                     color = TNgpred.pal,
+                     group = "Mature forest lower 95% CI",
+                     options = pathOptions(pane = "CIlow")) %>%
+      addLegend(pal = TNgCI.pal, values = values(c(TN_g_CIlow, TN_g_CIupp)),
+                title = "95% CI for probability </br> area is mature forest",
+                group = "Mature forest lower 95% CI", opacity = 1) %>%
+      # gap upper CI
+      addRasterImage(x = TN_g_CIupp , 
+                     color = TNgCI.pal,
                      opacity = 1,
-                     group = "Mature forest prediction error",
-                     options = pathOptions(pane = "pred")) %>%
-      addLegend(pal = TNgpred.pal, values = values(TN_g_pred),
-                title = "Prediction error",
-                group = "Mature forest prediction error", opacity = 1) %>% 
+                     group = "Mature forest upper 95% CI",
+                     options = pathOptions(pane = "CIupp")) %>%
+      addLegend(pal = TNgCI.pal, values = values(c(TN_g_CIlow, TN_g_CIupp)),
+                title = "95% CI for probability </br> area is mature forest",
+                group = "Mature forest upper 95% CI", opacity = 1) %>%
+      # gap lower PI  
+      addRasterImage(x = TN_g_PIlow , 
+                     color = TNgPI.pal,
+                     opacity = 1,
+                     group = "Mature forest lower 95% PI",
+                     options = pathOptions(pane = "PIlow")) %>%
+      addLegend(pal = TNgPI.pal, values = values(c(TN_g_PIlow, TN_g_PIupp)),
+                title = "95% PI for probability </br> area is mature forest",
+                group = "Mature forest lower 95% PI", opacity = 1) %>%
+      # gap upper PI
+      addRasterImage(x = TN_g_CIupp , 
+                     color = TNgCI.pal,
+                     opacity = 1,
+                     group = "Mature forest upper 95% PI",
+                     options = pathOptions(pane = "CIupp")) %>%
+      addLegend(pal = TNgPI.pal, values = values(c(TN_g_PIlow, TN_g_PIupp)),
+                title = "95% PI for probability </br> area is mature forest",
+                group = "Mature forest upper 95% PI", opacity = 1) %>%
       fitBounds(-54.1, 48.38, -53.8, 48.66)%>% 
       addHomeButton(ext = c(-54.1, 48.38, -53.8, 48.66), position = "topleft", group = "Recenter") %>%
-      addLayersControl(overlayGroups = c("Estimated C stocks", "C mean residual error", "C prediction error", "Estimated mature forest/gap", "Mature forest mean residual error", "Mature forest prediction error"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
+      addLayersControl(overlayGroups = c("Estimated C stocks", "C lower 95% CI", "C upper 95% CI", "C lower 95% PI", "C upper 95% PI", "Estimated mature forest/gap", "Mature forest lower 95% CI", "Mature forest upper 95% CI", "Mature forest lower 95% PI", "Mature forest upper 95% PI"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
       htmlwidgets::onRender("
         function() {
             $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:left\">Available layers</label>');
         }
     ") %>%
-      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error")) %>%
+      hideGroup( group = c("C lower 95% CI", "C upper 95% CI", "C lower 95% PI", "C upper 95% PI", "Mature forest lower 95% CI", "Mature forest upper 95% CI", "Mature forest lower 95% PI", "Mature forest upper 95% PI")) %>%
   addScaleBar(position = "bottomright") %>% 
   addLogo(arrow) 
   
