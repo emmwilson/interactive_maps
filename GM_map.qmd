@@ -35,12 +35,16 @@ parksGM <- vect("data/GM_outline.shp") %>%
 
 # Terra Nova data and palettes
 GM_c <- rast("data/GM_predict_tot_bm.tif")
-GM_c_mean <- rast("data/GM_predict_tot_se1.tif")
-GM_c_pred <- rast("data/GM_predict_tot_pse1.tif")
+GM_c_CIlow <- rast("data/GM_CI_lower_95.tif")
+GM_c_CIupp <- rast("data/GM_CI_upper_95.tif")
+GM_c_PIlow <- rast("data/GM_PI_lower_95.tif")
+GM_c_PIupp <- rast("data/GM_PI_upper_95.tif")
 
 GM_g <- rast("data/GM_predict_gap_bm.tif")
-GM_g_mean <- rast("data/GM_predict_tot_gap_se1.tif")
-GM_g_pred <- rast("data/GM_predict_tot_gap_pse1.tif")
+GM_g_CIlow <- rast("data/GM_gCI_lower_95.tif")
+GM_g_CIupp <- rast("data/GM_gCI_upper_95.tif")
+GM_g_PIlow <- rast("data/GM_gPI_lower_95.tif")
+GM_g_PIupp <- rast("data/GM_gPI_upper_95.tif")
 
 # north arrow
 arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.png"
@@ -50,10 +54,14 @@ arrow <- "https://cdn.pixabay.com/photo/2013/07/12/17/54/arrow-152596_960_720.pn
 GMc.pal <- colorNumeric(c("#faf6ef", "#ed6f66", "#8a1c18", "#6c100d"), domain = rev(values(GM_c)), na.color = "transparent")
 GMcmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(GM_c_mean)), na.color = "transparent")
 GMcpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(GM_c_pred)), na.color = "transparent")
+GMcCI.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = c(min(values(GM_c_CIlow), na.rm = T), max(values(GM_c_CIupp), na.rm = T)), na.color = "transparent")
+GMcPI.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = c(min(values(GM_c_PIlow), na.rm = T), max(values(GM_c_PIupp), na.rm = T)), na.color = "transparent")
 
 GMg.pal <- colorNumeric(c("#faf6ef", "#f7eedf", "#de5714"), domain = rev(0:1), na.color = "transparent")
 GMgmean.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = rev(values(GM_g_mean)), na.color = "transparent")
 GMgpred.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = rev(values(GM_g_pred)), na.color = "transparent")
+GMgCI.pal <- colorNumeric(c("white", "#6a51a3", "#3f007d"), domain = c(min(values(GM_g_CIlow), na.rm = T), max(values(GM_g_CIupp), na.rm = T)), na.color = "transparent")
+GMgPI.pal <- colorNumeric(c("white", "#2171b5", "#092955"), domain = c(min(values(GM_g_PIlow), na.rm = T), max(values(GM_g_PIupp), na.rm = T)), na.color = "transparent")
 ```
 
 ```{r echo=FALSE}
@@ -62,10 +70,12 @@ GM_map <- leaflet(height=1100, width=1000) %>%
       addProviderTiles('Esri.WorldImagery') %>%
       addMapPane("parks", zIndex = 410) %>% 
       addMapPane("roads", zIndex = 415) %>%
-      addMapPane("pred", zIndex = 420) %>% 
-      addMapPane("mean", zIndex = 425) %>% 
-      addMapPane("goutput", zIndex = 430) %>%
-      addMapPane("coutput", zIndex = 435) %>% 
+      addMapPane("PIupp", zIndex = 420) %>% 
+      addMapPane("PIlow", zIndex = 425) %>% 
+      addMapPane("CIupp", zIndex = 430) %>% 
+      addMapPane("CIlow", zIndex = 435) %>% 
+      addMapPane("goutput", zIndex = 440) %>%
+      addMapPane("coutput", zIndex = 445) %>% 
       addPolylines(data = roads, color = "#efbc15", opacity = 1, weight = 1.25,
                    options = pathOptions(pane = "roads")) %>%
       addPolygons(data = parksGM, color = "#1f78b4", weight = 1.25, fillColor = "#1f78b4", fillOpacity = 0.15,
@@ -79,24 +89,36 @@ GM_map <- leaflet(height=1100, width=1000) %>%
       addLegend(pal = GMc.pal, values = values(GM_c),
                 title = "Total Carbon (g/m<sup>2</sup>)",
                 group = "Estimated C stocks", opacity = 1) %>% 
-      # carbon mean error   
-      addRasterImage(x = GM_c_mean , 
-                     color = GMcmean.pal,
+      # carbon lower CI  
+      addRasterImage(x = GM_c_CIlow , 
+                     color = GMcCI.pal,
                      opacity = 1,
                      group = "C mean residual error",
-                     options = pathOptions(pane = "mean")) %>%
-      addLegend(pal = GMcmean.pal, values = values(GM_c_mean),
-                title = "Mean residual error",
+                     options = pathOptions(pane = "CIlow")) %>%
+      addLegend(pal = GMcCI.pal, values = values(c(GM_c_CIlow, GM_c_CIupp)),
+                title = "95% CI </br> for carbon estimates (g/m<sup>2</sup>)",
                 group = "C mean residual error", opacity = 1) %>%
-      # carbon prediction error   
-      addRasterImage(x = GM_c_pred , 
-                     color = GMcpred.pal,
+      # carbon upper CI
+      addRasterImage(x = GM_c_CIupp , 
+                     color = GMcCI.pal,
+                     opacity = 1,
+                     group = "C mean residual error",
+                     options = pathOptions(pane = "CIupp")) %>%
+      # carbon lower PI  
+      addRasterImage(x = GM_c_PIlow , 
+                     color = GMcPI.pal,
                      opacity = 1,
                      group = "C prediction error",
-                     options = pathOptions(pane = "pred")) %>%
-      addLegend(pal = GMcpred.pal, values = values(GM_c_pred),
-                title = "Prediction error",
+                     options = pathOptions(pane = "PIlow")) %>%
+      addLegend(pal = GMcPI.pal, values = values(c(GM_c_PIlow, GM_c_PIupp)),
+                title = "95% PI </br> for carbon estimates (g/m<sup>2</sup>)",
                 group = "C prediction error", opacity = 1) %>%
+      # carbon upper PI
+      addRasterImage(x = GM_c_PIupp , 
+                     color = GMcPI.pal,
+                     opacity = 1,
+                     group = "C prediction error",
+                     options = pathOptions(pane = "PIupp")) %>%
       # gap estimates 
       addRasterImage(x = GM_g , 
                      color = GMg.pal,
@@ -106,33 +128,45 @@ GM_map <- leaflet(height=1100, width=1000) %>%
       addLegend(pal = GMg.pal, values = values(GM_g),
                 title = "Probability area is mature forest",
                 group = "Estimated mature forest/gap", opacity = 1) %>% 
-      # gap mean error 
-      addRasterImage(x = GM_g_mean , 
-                     color = GMgmean.pal,
+      # gap lower CI  
+      addRasterImage(x = GM_g_CIlow , 
+                     color = GMgCI.pal,
                      opacity = 1,
-                     group = "Mature forest mean residual error",
-                     options = pathOptions(pane = "mean")) %>%
-      addLegend(pal = GMgmean.pal, values = values(GM_g_mean),
-                title = "Mean residual error",
-                group = "Mature forest mean residual error", opacity = 1) %>% 
-      # gap prediction error 
-      addRasterImage(x = GM_g_pred , 
-                     color = GMgpred.pal,
+                     group = "gap mean residual error",
+                     options = pathOptions(pane = "CIlow")) %>%
+      addLegend(pal = GMgCI.pal, values = values(c(GM_g_CIlow, GM_g_CIupp)),
+                title = "95% CI for probability </br> area is mature forest",
+                group = "gap mean residual error", opacity = 1) %>%
+      # gap upper CI
+      addRasterImage(x = GM_g_CIupp , 
+                     color = GMgCI.pal,
                      opacity = 1,
-                     group = "Mature forest prediction error",
-                     options = pathOptions(pane = "pred")) %>%
-      addLegend(pal = GMgpred.pal, values = values(GM_g_pred),
-                title = "Prediction error",
-                group = "Mature forest prediction error", opacity = 1) %>% 
+                     group = "gap mean residual error",
+                     options = pathOptions(pane = "CIupp")) %>%
+      # gap lower CI  
+      addRasterImage(x = GM_g_PIlow , 
+                     color = GMgPI.pal,
+                     opacity = 1,
+                     group = "gap prediction error",
+                     options = pathOptions(pane = "PIlow")) %>%
+      addLegend(pal = GMgPI.pal, values = values(c(GM_g_PIlow, GM_g_PIupp)),
+                title = "95% PI for probability </br> area is mature forest",
+                group = "gap prediction error", opacity = 1) %>%
+      # gap upper CI
+      addRasterImage(x = GM_g_CIupp , 
+                     color = GMgCI.pal,
+                     opacity = 1,
+                     group = "gap residual error",
+                     options = pathOptions(pane = "CIupp")) %>%
       fitBounds(-57.73 ,49.35, -57.85, 49.95) %>% 
       addHomeButton(ext = c(-57.73 ,49.35, -57.85, 49.95), position = "topleft", group = "Recenter")%>%
-      addLayersControl(overlayGroups = c("Estimated C stocks", "C mean residual error", "C prediction error", "Estimated mature forest/gap", "Mature forest mean residual error", "Mature forest prediction error"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
+      addLayersControl(overlayGroups = c("Estimated C stocks", "C mean residual error", "C prediction error", "Estimated mature forest/gap", "gap mean residual error", "gap prediction error"), position = "topleft", options = layersControlOptions(collapsed = F)) %>% 
       htmlwidgets::onRender("
         function() {
             $('.leaflet-control-layers-overlays').prepend('<label style=\"text-align:left\">Available layers</label>');
         }
     ") %>%
-      hideGroup( group = c("C mean residual error", "C prediction error","Mature forest mean residual error", "Mature forest prediction error")) %>%
+      hideGroup( group = c("C mean residual error", "C prediction error","gap mean residual error", "gap prediction error")) %>%
   addScaleBar(position = "bottomright") %>% 
   addLogo(arrow)
     
