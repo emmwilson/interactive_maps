@@ -9,7 +9,7 @@ website:
   title: "interactvie_maps"
   navbar:
     left:
-      - text: "Home"
+      - text: "Home" 
         href: index.qmd
       - text: "Terra Nova"
         href: TN_map.qmd
